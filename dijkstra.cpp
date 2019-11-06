@@ -83,7 +83,7 @@ void floyd()
                 minValue[i][j] = g[i][j];
             }
 
-            path[i][j] = j;
+            path[i][j] = i;
         }
     }
 
@@ -101,7 +101,7 @@ void floyd()
                         if (minValue[i][k] + minValue[k][j] < minValue[i][j])
                         {
                             minValue[i][j] = minValue[i][k] + minValue[k][j];
-                            path[i][j] = path[i][k];
+                            path[i][j] = k;
                         }
                     }
                 }
@@ -178,14 +178,20 @@ int main()
     std::cout << "--------------------------------------" << std::endl;
     //printShortPath();
 
-    std::cout << "v" << 0;
-    pos = path[0][4];
-    while (pos != 4)
-    {
-        std::cout << "v" << pos;
-        pos = path[pos][4];
+    pos = 4;
+    stack.push(pos);
+    while (pos !=0)    
+    {  
+        pos = path[0][pos];
+        stack.push(pos);
     }
-    std::cout <<"v" << pos << std::endl;
+    while (!stack.empty())
+    {
+      auto top = stack.top();
+       std::cout << "v" << top;
+       stack.pop();
+    }
+    std::cout << std::endl;
 
 
     return 0;
