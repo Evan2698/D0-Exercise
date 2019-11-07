@@ -2,6 +2,8 @@
 #include <set>
 #include <algorithm>
 #include <stack>
+#include <queue>
+#include <vector>
 using namespace std;
 const long DBL_MAX = 500000;
 long g[6][6] = {
@@ -128,6 +130,54 @@ void printShortPath()
     }
 }
 
+std::stack<int> R;
+
+void spfa()
+{
+    std::vector<long> dis(6, 0);
+    for (int i = 0; i < 6; ++i)
+    {
+        dis[i] = DBL_MAX;
+    }
+
+    std::queue<int> Q;
+    std::vector<bool> Flag = {false, false, false, false, false, false};
+    std::vector<int> path(6, -1);
+    Q.push(0);
+    dis[0] = 0;
+    Flag[0] = true;
+    while (!Q.empty())
+    {
+        int v = Q.front();
+        Q.pop();
+        Flag[0] = false;
+
+ 
+
+       for (int i = 0; i < 6; ++i)
+        {
+            if (g[v][i] != DBL_MAX &&  dis[i] > dis[v] + g[v][i])
+            {
+                dis[i] = dis[v] + g[v][i];
+                path[i] = v;
+                if (!Flag[i])
+                {
+                    Q.push(i);
+                    Flag[i] = true;
+                }
+            }
+        }
+    }
+
+    int pos = 4;
+    R.push(pos);
+    while (pos > 0)
+    {
+        pos = path[pos];
+        R.push(pos);
+    }
+  }
+
 int main()
 {
 
@@ -147,19 +197,19 @@ int main()
     int pos = 4;
     std::stack<int> stack;
     stack.push(pos);
-    while (pos > 0)    
-    {  
+    while (pos > 0)
+    {
         pos = pred[pos];
         stack.push(pos);
     }
     while (!stack.empty())
     {
-      auto top = stack.top();
-       std::cout << "v" << top;
-       stack.pop();
+        auto top = stack.top();
+        std::cout << "v" << top;
+        stack.pop();
     }
-    
-    std::cout<< std::endl;
+
+    std::cout << std::endl;
 
     std::cout << "------------------------------------" << std::endl;
 
@@ -180,19 +230,27 @@ int main()
 
     pos = 4;
     stack.push(pos);
-    while (pos !=0)    
-    {  
+    while (pos != 0)
+    {
         pos = path[0][pos];
         stack.push(pos);
     }
     while (!stack.empty())
     {
-      auto top = stack.top();
-       std::cout << "v" << top;
-       stack.pop();
+        auto top = stack.top();
+        std::cout << "v" << top;
+        stack.pop();
     }
     std::cout << std::endl;
-
+    std::cout << "--------------------------------------" << std::endl;
+    spfa();
+    while (!R.empty())
+    {
+        auto top = R.top();
+        std::cout << "v" << top;
+        R.pop();
+    }
+    std::cout << std::endl;
 
     return 0;
 }
